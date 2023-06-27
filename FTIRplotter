@@ -1,0 +1,30 @@
+def FTIRplotter(df):
+    # Remove top and right axes
+    plt.gca().spines['top'].set_visible(False)
+    plt.gca().spines['right'].set_visible(False)
+    
+    # Remove the numerical labels from the y-axis
+    plt.gca().set_yticklabels([])
+    
+    # Remove the ticks on the top and right axes
+    plt.gca().tick_params(axis='y', which='both', left=False)
+    
+    plt.rcParams['font.family'] = 'Times New Roman'
+    
+    x = df["Wavenumber"]
+    Y_names = df.columns.tolist()
+    Y_names.remove("Wavenumber")
+    
+    colors = ['r', 'g', 'b', 'c', 'm', 'y']  # List of colors
+    
+    for i, y_name in enumerate(Y_names):
+        y = df[y_name]
+        color = colors[i % len(colors)]  # Assign color from the list cyclically
+        plt.plot(x, y + 10*i, color=color, linewidth=0.7, label=y_name)
+    
+    plt.xlabel("Wavenumber (cm-1)")
+    plt.ylabel("%T")
+    plt.xlim([380, 4010])
+    plt.ylim([80, 140])
+    plt.legend(loc="upper center", bbox_to_anchor=(1.1, 1.1), ncol=1)
+    plt.savefig(f"{'_'.join(df.columns)}.png", dpi=300, bbox_inches='tight')
